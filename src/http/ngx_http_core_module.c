@@ -2483,6 +2483,9 @@ ngx_http_subrequest(ngx_http_request_t *r,
 #if (NGX_HTTP_SPDY)
     sr->spdy_stream = r->spdy_stream;
 #endif
+#if (NGX_HTTP_V2)
+    sr->stream = r->stream;
+#endif
 
     sr->method = NGX_HTTP_GET;
     sr->http_version = r->http_version;
@@ -4211,6 +4214,18 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
             ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
                                "the \"spdy\" parameter requires "
                                "ngx_http_spdy_module");
+            return NGX_CONF_ERROR;
+#endif
+        }
+
+        if (ngx_strcmp(value[n].data, "http2") == 0) {
+#if (NGX_HTTP_V2)
+            lsopt.http2 = 1;
+            continue;
+#else
+            ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
+                               "the \"http2\" parameter requires "
+                               "ngx_http_v2_module");
             return NGX_CONF_ERROR;
 #endif
         }
