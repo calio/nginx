@@ -40,6 +40,13 @@ ngx_http_read_client_request_body(ngx_http_request_t *r,
 
     r->main->count++;
 
+#if (NGX_HTTP_V2)
+    if (r->stream && r == r->main) {
+        r->request_body_no_buffering = 0;
+        rc = ngx_http_v2_read_request_body(r, post_handler);
+        goto done;
+    }
+#endif
 #if (NGX_HTTP_SPDY)
     if (r->spdy_stream && r == r->main) {
         r->request_body_no_buffering = 0;
@@ -570,6 +577,12 @@ ngx_http_discard_request_body(ngx_http_request_t *r)
     ngx_int_t     rc;
     ngx_event_t  *rev;
 
+#if (NGX_HTTP_V2)
+    if (r->stream && r == r->main) {
+        r->stream->skip_data = NGX_HTTP_V2_DATA_DISCARD;
+        return NGX_OK;
+    }
+#endif
 #if (NGX_HTTP_SPDY)
     if (r->spdy_stream && r == r->main) {
         r->spdy_stream->skip_data = NGX_SPDY_DATA_DISCARD;

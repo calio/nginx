@@ -475,6 +475,12 @@ ngx_http_upstream_init(ngx_http_request_t *r)
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, c->log, 0,
                    "http init upstream, client timer: %d", c->read->timer_set);
 
+#if (NGX_HTTP_V2)
+    if (r->stream) {
+        ngx_http_upstream_init_request(r);
+        return;
+    }
+#endif
 #if (NGX_HTTP_SPDY)
     if (r->spdy_stream) {
         ngx_http_upstream_init_request(r);
@@ -1151,6 +1157,11 @@ ngx_http_upstream_check_broken_connection(ngx_http_request_t *r,
         return;
     }
 
+#if (NGX_HTTP_V2)
+    if (r->stream) {
+        return;
+    }
+#endif
 #if (NGX_HTTP_SPDY)
     if (r->spdy_stream) {
         return;

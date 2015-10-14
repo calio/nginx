@@ -317,6 +317,18 @@ HTTP_POSTPONE_FILTER_SRCS=src/http/ngx_http_postpone_filter_module.c
 HTTP_FILE_CACHE_SRCS=src/http/ngx_http_file_cache.c
 
 
+HTTP_V2_MODULE=ngx_http_v2_module
+HTTP_V2_FILTER_MODULE=ngx_http_v2_filter_module
+HTTP_V2_INCS="src/http/v2"
+HTTP_V2_DEPS="src/http/v2/ngx_http_v2.h \
+              src/http/v2/ngx_http_v2_module.h"
+HTTP_V2_SRCS="src/http/v2/ngx_http_v2.c \
+              src/http/v2/ngx_http_v2_table.c \
+              src/http/v2/ngx_http_v2_huff_decode.c \
+              src/http/v2/ngx_http_v2_huff_encode.c \
+              src/http/v2/ngx_http_v2_module.c \
+              src/http/v2/ngx_http_v2_filter_module.c"
+
 HTTP_SPDY_MODULE=ngx_http_spdy_module
 HTTP_SPDY_FILTER_MODULE=ngx_http_spdy_filter_module
 HTTP_SPDY_DEPS="src/http/ngx_http_spdy.h \
